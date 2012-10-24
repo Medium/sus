@@ -1,0 +1,27 @@
+.fat {
+  display: block;
+  position: relative
+}
+
+.ded {
+  display: block;
+  position: relative
+}
+
+.dhg {
+  display: block;
+  position: relative
+}
+
+.dhg2 {
+  display: block;
+  position: relative;
+  background: 12px 12px url('http://google.com/img/a.png') no-repeat #000
+}
+
+@media screen and (min-width: 1300px) {
+  .figure,
+li#f-mycroft {
+  position: relative
+}
+}

@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+var nopt  = require('nopt')
+var path  = require('path')
+var fs    = require('fs')
+var pkg   = require(path.join(__dirname, '..', 'package.json'))
+var sus   = require('../')
+var async = require('async')
+
+var command
+var options
+var shorthand
+
+var input = process.argv
+
+process.title = 'bower'
+
+shorthand = { 'v': ['--version'], 'b': ['--base'], 'o': ['--out'] }
+options   = { version: Boolean }
+options   = nopt(options, shorthand, process.argv)
+
+sus.version = pkg.version
+
+if (options.version)             return console.log(sus.version)
+if (!options.argv.remain.length) return console.log('no args? v sus.')
+
+async.forEach(options.argv.remain, function(item, nextFile) {
+  if (path.extname(item) != '.css') return extFile();
+
+  fs.readFile(item, 'utf-8', function (err, data) {
+    sus(data, {
+      base: path.dirname(item)
+    }).parse(function (err, parsed) {
+      async.parallel([
+        async.apply(fs.writeFile, buildOutPath(item, 'base'), parsed.base())
+      , async.apply(fs.writeFile, buildOutPath(item, 'sprites'), parsed.sprites()) ]
+      , nextFile)
+    })
+  })
+})
+
+function buildOutPath (item, type) {
+  return path.join(options.out || path.dirname(item), path.basename(item, '.css') + '-' + type + '.css')
+}

@@ -1,0 +1,23 @@
+.fat {
+  display: block;
+  position: relative;
+  background-image: url('../img/a.png');
+}
+
+.ded {
+  display: block;
+  position: relative;
+  background-image: url('../img/b.jpeg');
+}
+
+.foo h1 + .dhg,
+.mdo {
+  width: 50px;
+  background-image: url('../img/c.gif');
+}
+
+.fat,
+.foo,
+.bar {
+  background-image: url('../img/a.png');
+}

@@ -1,0 +1,43 @@
+.fat {
+  display: block;
+  position: relative;
+  background-image: url('../img/a.png');
+}
+
+.ded {
+  display: block;
+  position: relative;
+  background: 12px 12px no-repeat #000 url('../img/a.png');
+}
+
+.dhg {
+  display: block;
+  position: relative;
+  background: 12px 12px no-repeat #000 url('../img/a.png');
+}
+
+.dhg2 {
+  display: block;
+  position: relative;
+  background: 12px 12px url('http://google.com/img/a.png') no-repeat #000;
+}
+
+.fat2 {
+  background-image: url('../img/a.png');
+  -moz-border-image: 25% repeat url('../img/a.png');
+       border-image: 25% repeat url('../img/a.png');
+}
+
+@media screen and (min-width: 1300px) {
+  .figure,
+  li#f-mycroft {
+    position: relative;
+    background: 12px 12px no-repeat #000 url('../img/a.png');
+  }
+  h4 {
+    background-image: url('../img/a.png');
+  }
+  hr {
+    background-image: url('../img/b.jpeg');
+  }
+}
