@@ -1,15 +1,11 @@
-SUS - Simple UID stylesheets
-============================
-
-###TODO
-
-+ retina support
+SUS
+===
 
 SUS parses your css source and generates two new CSS sources from it – a base source and a sprites source.
 
 The base source has all your original styles minus all background image defintions.
 
-The sprites source has all your background image defintions, but converted to data-uids
+The sprites source has all your background image defintions, but converted to data-uris
 
 ### CLI
 

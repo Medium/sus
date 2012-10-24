@@ -1,7 +1,7 @@
 {
   "name": "sus",
   "version": "1.0.0",
-  "description": "Simple UID stylesheets",
+  "description": "Simple Data-URI Stylesheets",
   "keywords": ["stylesheet"],
   "author": "FAT <fat@obvious.com>",
   "bin": { "sus": "bin/sus" },
