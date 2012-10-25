@@ -13,7 +13,7 @@ var shorthand
 
 var input = process.argv
 
-process.title = 'bower'
+process.title = 'sus'
 
 shorthand = { 'v': ['--version'], 'b': ['--base'], 'o': ['--out'] }
 options   = { version: Boolean }
