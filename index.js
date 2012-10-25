@@ -1,3 +1,9 @@
+// ==========================================
+// Copyright 2012 The Obvious Corporation
+// Licensed under The MIT License
+// http://opensource.org/licenses/MIT
+// ==========================================
+
 var _  = require("lodash")
 var fs = require("fs")
 var CSS = require("css")
