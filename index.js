@@ -50,13 +50,15 @@ function parseRules (base, sprites, options, complete) {
     // that we can extract and inline in -sprites.css
     async.filterSeries(rule.declarations, function (declaration, nextDeclaration) {
       var ext
-      var file
       var filepath
 
-      //exit early if declaration doesn't contain a url
-      if (!SUS.URL_REGEXP.test(declaration.value)) return nextDeclaration(declaration)
+      var file = declaration.value.match(SUS.URL_REGEXP)
 
-      file = RegExp.$1
+      //exit early if declaration doesn't contain a url
+      if (!file) return nextDeclaration(declaration)
+
+      // set file to matched url
+      file = file[1]
 
       // exit early if url is a remote reference, and not local
       if (SUS.PROTOCOCAL_REGEXP.test(file)) return nextDeclaration(declaration)
