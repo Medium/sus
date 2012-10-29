@@ -9,7 +9,6 @@
   "dependencies": {
     "nopt": "1.0.10",
     "css": "1.0.5",
-    "lodash": "0.8.2",
     "async": "0.1.22"
   },
   "devDependencies": {

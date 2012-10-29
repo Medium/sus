@@ -1,6 +1,5 @@
 // Copyright 2012 The Obvious Corporation
 
-var _  = require("lodash")
 var fs = require("fs")
 var CSS = require("css")
 var path = require("path")
@@ -19,6 +18,15 @@ SUS.DOT_REGEXP = /^./
 SUS.URL_REGEXP = /url\s*\(['"]?([^\)'"]+)['"]?\)/
 SUS.PROTOCOCAL_REGEXP = /\/\//
 
+function extend (obj) {
+  Array.prototype.slice.call(arguments, 1).forEach(function (source) {
+    for (var prop in source) {
+      obj[prop] = source[prop]
+    }
+  })
+  return obj
+}
+
 function parseRules (base, sprites, options, complete) {
   var cache = {}
 
@@ -33,7 +41,7 @@ function parseRules (base, sprites, options, complete) {
 
       // create a sprite object and push it to the sprite rules
       var spriteKey = sprites.rules.length
-      var _sprite = _.clone(rule)
+      var _sprite = extend({}, rule)
       _sprite.rules = []
       sprites.rules.push(_sprite)
 
