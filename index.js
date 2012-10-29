@@ -120,13 +120,13 @@ function parseSprite(data, sprites, rule, declaration, cache, ext, complete) {
   complete(declaration)
 }
 
-SUS.prototype.parse = function (complete) {
+SUS.prototype.parse = function (callback) {
   this._base = CSS.parse(this.source)
   this._sprites = { "stylesheet": { "rules": [] } }
 
   // parse rules then report back to complete callback
   parseRules(this._base.stylesheet, this._sprites.stylesheet, this.options, function (err) {
-    complete(err, this)
+    callback(err, this)
   }.bind(this))
 
   return this
