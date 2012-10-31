@@ -54,44 +54,50 @@ function parseRules (base, sprites, options, complete) {
       })
     }
 
-    // filter rule.declarations for declarations which contain a url()
-    // that we can extract and inline in -sprites.css
-    async.filterSeries(rule.declarations, function (declaration, nextDeclaration) {
-      var ext
-      var filepath
+    // we craete a new stack – css files can get quite large and without this
+    // you can sometimes exceed the callstack limit
+    process.nextTick(function () {
 
-      var file = declaration.value.match(SUS.URL_REGEXP)
+      // filter rule.declarations for declarations which contain a url()
+      // that we can extract and inline in -sprites.css
+      async.filterSeries(rule.declarations, function (declaration, nextDeclaration) {
+        var ext
+        var filepath
 
-      //exit early if declaration doesn't contain a url
-      if (!file) return nextDeclaration(declaration)
+        var file = declaration.value.match(SUS.URL_REGEXP)
 
-      // set file to matched url
-      file = file[1]
+        //exit early if declaration doesn't contain a url
+        if (!file) return nextDeclaration(declaration)
 
-      // exit early if url is a remote reference, and not local
-      if (SUS.PROTOCOCAL_REGEXP.test(file)) return nextDeclaration(declaration)
+        // set file to matched url
+        file = file[1]
 
-      // if base is a function, set that to the file path
-      if (typeof options.base == "function") {
-        filepath = options.base(file)
-      } else {
-        filepath = path.join(options.base, file)
-      }
+        // exit early if url is a remote reference, and not local
+        if (SUS.PROTOCOCAL_REGEXP.test(file)) return nextDeclaration(declaration)
 
-      // parse ext name for uri type
-      ext = path.extname(file).replace(SUS.DOT_REGEXP, "")
+        // if base is a function, set that to the file path
+        if (typeof options.base == "function") {
+          filepath = options.base(file)
+        } else {
+          filepath = path.join(options.base, file)
+        }
 
-      // read img file and then add sprite sheet
-      if (options.sync) {
-        parseSprite(fs.readFileSync(filepath, "base64"), sprites, rule, declaration, cache, ext, nextDeclaration)
-      } else {
-        fs.readFile(filepath, "base64", function (err, data) {
-          if (err) return complete(err)
-          parseSprite(data, sprites, rule, declaration, cache, ext, nextDeclaration)
-        })
-      }
-    }, function (result) {
-      nextRule(rule.declarations = result.length && result)
+        // parse ext name for uri type
+        ext = path.extname(file).replace(SUS.DOT_REGEXP, "")
+
+        // read img file and then add sprite sheet
+        if (options.sync) {
+          parseSprite(fs.readFileSync(filepath, "base64"), sprites, rule, declaration, cache, ext, nextDeclaration)
+        } else {
+          fs.readFile(filepath, "base64", function (err, data) {
+            if (err) return complete(err)
+            parseSprite(data, sprites, rule, declaration, cache, ext, nextDeclaration)
+          })
+        }
+      }, function (result) {
+        nextRule(rule.declarations = result.length && result)
+      })
+
     })
 
   }, function (result) {
