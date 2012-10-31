@@ -1,6 +1,6 @@
 {
   "name": "sus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple Data-URI Stylesheets",
   "keywords": ["stylesheet"],
   "author": "FAT <fat@obvious.com>",
