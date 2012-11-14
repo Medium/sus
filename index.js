@@ -16,6 +16,7 @@ function SUS (source, options) {
 // These are the RegExp constants we use
 SUS.DOT_REGEXP = /^./
 SUS.URL_REGEXP = /url\s*\(['"]?([^\)'"]+)['"]?\)/
+SUS.URL_REGEXP_G = /url\s*\(['"]?[^\)'"]+['"]?\)/g
 SUS.PROTOCOCAL_REGEXP = /\/\//
 
 function extend (obj) {
@@ -28,7 +29,6 @@ function extend (obj) {
 }
 
 function parseRules (base, sprites, options, complete) {
-  var cache = {}
 
   // filter rules, if we find any empty ones (or ones which
   // have become empty from the declaration filter, then we
@@ -61,39 +61,44 @@ function parseRules (base, sprites, options, complete) {
       // filter rule.declarations for declarations which contain a url()
       // that we can extract and inline in -sprites.css
       async.filterSeries(rule.declarations, function (declaration, nextDeclaration) {
-        var ext
-        var filepath
 
-        var file = declaration.value.match(SUS.URL_REGEXP)
+        var files = declaration.value.match(SUS.URL_REGEXP_G)
 
         //exit early if declaration doesn't contain a url
-        if (!file) return nextDeclaration(declaration)
+        if (!files) return nextDeclaration(declaration)
 
-        // set file to matched url
-        file = file[1]
+        // look over all occurences of url_regexp
+        async.map(files, function (file, nextFile) {
 
-        // exit early if url is a remote reference, and not local
-        if (SUS.PROTOCOCAL_REGEXP.test(file)) return nextDeclaration(declaration)
+          // get inner file value
+          var filepath = file.match(SUS.URL_REGEXP)[1]
 
-        // if base is a function, set that to the file path
-        if (typeof options.base == "function") {
-          filepath = options.base(file)
-        } else {
-          filepath = path.join(options.base, file)
-        }
+          // exit early if url is a remote reference, and not local
+          if (SUS.PROTOCOCAL_REGEXP.test(filepath)) return nextFile(null)
 
-        // parse ext name for uri type
-        ext = path.extname(file).replace(SUS.DOT_REGEXP, "")
+          // if base is a function, set that to the file path
+          if (typeof options.base == "function") {
+            filepath = options.base(filepath)
+          } else {
+            filepath = path.join(options.base, filepath)
+          }
 
-        // read img file and then add sprite sheet
-        if (options.sync) {
-          parseSprite(fs.readFileSync(filepath, "base64"), sprites, rule, declaration, cache, ext, nextDeclaration)
-        } else {
+          // read img file and then add sprite sheet
           fs.readFile(filepath, "base64", function (err, data) {
             if (err) return complete(err)
-            parseSprite(data, sprites, rule, declaration, cache, ext, nextDeclaration)
+            nextFile(null, {
+              expression: file
+            , ext: path.extname(filepath).replace(SUS.DOT_REGEXP, "")
+            , path: filepath
+            , data: data
+            })
           })
-        }
+
+        }, function (err, results) {
+          if (!results.filter(function (r) { return r }).length) return nextDeclaration(declaration)
+          parseSprite(results, sprites, rule, declaration, nextDeclaration)
+        })
+
       }, function (result) {
         nextRule(rule.declarations = result.length && result)
       })
@@ -105,18 +110,21 @@ function parseRules (base, sprites, options, complete) {
   })
 }
 
-function parseSprite(data, sprites, rule, declaration, cache, ext, complete) {
+function parseSprite(files, sprites, rule, declaration, complete) {
+  var value = declaration.value
   var spriteRule
   var spriteDeclaration
   var dataURI
 
-  // create data uri
-  dataURI = "url(data:image/" + ext + ";base64," + data + ")"
+  files.forEach(function (file) {
+    dataURI = "url(data:image/" + file.ext + ";base64," + file.data + ")"
+    value = value.replace(file.expression, dataURI)
+  })
 
   // define sprite declaration
   spriteDeclaration = {
     "property": declaration.property
-  , "value": declaration.value.replace(SUS.URL_REGEXP, dataURI)
+  , "value": value
   }
 
   // define sprite rule
