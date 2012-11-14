@@ -16,7 +16,7 @@ function SUS (source, options) {
 // These are the RegExp constants we use
 SUS.DOT_REGEXP = /^./
 SUS.URL_REGEXP = /url\s*\(['"]?([^\)'"]+)['"]?\)/
-SUS.URL_REGEXP_G = /url\s*\(['"]?[^\)'"]+['"]?\)/g
+SUS.URL_REGEXP_GLOBAL = /url\s*\(['"]?[^\)'"]+['"]?\)/g
 SUS.PROTOCOCAL_REGEXP = /\/\//
 
 function extend (obj) {
@@ -62,7 +62,7 @@ function parseRules (base, sprites, options, complete) {
       // that we can extract and inline in -sprites.css
       async.filterSeries(rule.declarations, function (declaration, nextDeclaration) {
 
-        var files = declaration.value.match(SUS.URL_REGEXP_G)
+        var files = declaration.value.match(SUS.URL_REGEXP_GLOBAL)
 
         //exit early if declaration doesn't contain a url
         if (!files) return nextDeclaration(declaration)
