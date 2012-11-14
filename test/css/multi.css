@@ -13,7 +13,7 @@
 .foo h1 + .dhg,
 .mdo {
   width: 50px;
-  background-image: url('../img/c.gif');
+  background: url('../img/c.gif'), url('../img/a.png');
 }
 
 .fat,
