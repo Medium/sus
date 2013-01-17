@@ -30,6 +30,7 @@ function extend (obj) {
 
 function parseRules (base, sprites, options, complete) {
 
+
   // filter rules, if we find any empty ones (or ones which
   // have become empty from the declaration filter, then we
   // remove them from the rules list)
@@ -57,6 +58,11 @@ function parseRules (base, sprites, options, complete) {
     // we craete a new stack – css files can get quite large and without this
     // you can sometimes exceed the callstack limit
     process.nextTick(function () {
+
+      // skip font-face declarations
+      if (rule.selectors[0] && rule.selectors[0] == '@font-face') {
+        return nextRule(rule)
+      }
 
       // filter rule.declarations for declarations which contain a url()
       // that we can extract and inline in -sprites.css
