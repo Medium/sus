@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'medium-icons';
+  src: url('@{configFontBase}/medium-icons.eot');
+  src: url('@{configFontBase}/medium-icons.eot?#iefix') format('embedded-opentype'),
+       url('@{configFontBase}/medium-icons.woff') format('woff'),
+       url('@{configFontBase}/medium-icons.ttf') format('truetype'),
+       url('@{configFontBase}/medium-icons.svg#new_fontregular') format('svg');
+  font-weight: normal;
+  font-style: normal
+}
+
 .fat {
   display: block;
   position: relative
