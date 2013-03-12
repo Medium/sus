@@ -59,8 +59,8 @@ function parseRules (base, sprites, options, complete) {
     // you can sometimes exceed the callstack limit
     process.nextTick(function () {
 
-      // skip font-face declarations
-      if (rule.selectors[0] && rule.selectors[0] == '@font-face') {
+      // skip keyframes and font-face declarations
+      if (rule.keyframes || (rule.selectors[0] && rule.selectors[0] == '@font-face')) {
         return nextRule(rule)
       }
 
