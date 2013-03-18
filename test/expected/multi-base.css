@@ -23,3 +23,13 @@
 .mdo {
   width: 50px
 }
+
+@keyframes animate {
+  from {
+    top: 0
+  }
+
+  to {
+    top: 100px
+  }
+}

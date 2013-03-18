@@ -32,3 +32,13 @@
 .bar {
   background-image: url('../img/a.png');
 }
+
+@keyframes animate {
+  from {
+    top: 0;
+  }
+
+  to {
+    top: 100px;
+  }
+}
