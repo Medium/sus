@@ -83,9 +83,9 @@ function parseRules (base, sprites, options, complete) {
           if (SUS.PROTOCOCAL_REGEXP.test(filepath)) return nextFile(null)
 
           // if base is a function, set that to the file path
-          if (typeof options.base == "function") {
+          if (typeof options.base == 'function') {
             filepath = options.base(filepath)
-          } else {
+          } else if (typeof options.base != 'undefined') {
             filepath = path.join(options.base, filepath)
           }
 
