@@ -57,7 +57,7 @@ function parseRules (base, sprites, options, complete) {
 
     // we craete a new stack – css files can get quite large and without this
     // you can sometimes exceed the callstack limit
-    process.nextTick(function () {
+    setImmediate(function () {
 
       // skip keyframes and font-face declarations
       if (rule.keyframes || (rule.selectors[0] && rule.selectors[0] == '@font-face')) {
